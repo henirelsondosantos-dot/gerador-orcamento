@@ -7,41 +7,34 @@ HTML = """
 <html>
 <head>
     <title>Gerador de Orçamento</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
-        button:hover { background: #218838; }
-        .resultado { background: #f8f9fa; padding: 20px; margin-top: 20px; border-radius: 4px; white-space: pre-wrap; }
-        .footer { margin-top: 30px; text-align: center; color: #666; font-size: 14px; }
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
+        button { background: #25D366; color: white; padding: 12px; border: none; width: 100%; font-size: 16px; cursor: pointer; }
+        .orcamento { border: 1px solid #ccc; padding: 20px; margin-top: 20px; }
+        .footer { text-align: center; margin-top: 30px; color: #666; }
     </style>
 </head>
 <body>
-    <h2>Gerador de Orçamento Rápido</h2>
-    <form method="post">
-        <label>Nome do Cliente:</label>
-        <input name="cliente" required>
-        
-        <label>Serviço:</label>
-        <input name="servico" required>
-        
-        <label>Valor (Kz):</label>
-        <input name="valor" type="number" step="0.01" required>
-        
+    <h2>Gerador de Orçamento</h2>
+    <form method="POST">
+        <input type="text" name="cliente" placeholder="Nome do Cliente" required>
+        <textarea name="servico" placeholder="Descrição do Serviço" required></textarea>
+        <input type="number" name="valor" placeholder="Valor em Kz" required>
         <button type="submit">Gerar Orçamento</button>
     </form>
     
     {% if orcamento %}
-    <div class="resultado">
-        <h3>Orçamento Gerado:</h3>
-        {{ orcamento }}
+    <div class="orcamento">
+        <h3>Orçamento para {{ orcamento.cliente }}</h3>
+        <p><strong>Serviço:</strong> {{ orcamento.servico }}</p>
+        <p><strong>Valor:</strong> {{ orcamento.valor }} Kz</p>
     </div>
     {% endif %}
     
     <div class="footer">
-        HENERÁRIO<br>
+        ITINERÁRIO<br>
         Desenvolvedor - Luanda, Angola<br>
         WhatsApp: +244 973574928
     </div>
@@ -53,10 +46,12 @@ HTML = """
 def home():
     orcamento = None
     if request.method == "POST":
-        cliente = request.form["cliente"]
-        servico = request.form["servico"]
-        valor = float(request.form["valor"])
-        orcamento = f"Cliente: {cliente}\\nServiço: {servico}\\nValor Total: {valor:,.2f} Kz\\n\\nOrçamento válido por 15 dias."
+        orcamento = {
+            "cliente": request.form["cliente"],
+            "servico": request.form["servico"],
+            "valor": request.form["valor"]
+        }
     return render_template_string(HTML, orcamento=orcamento)
 
 if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
