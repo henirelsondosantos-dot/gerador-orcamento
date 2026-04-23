@@ -34,8 +34,8 @@ HTML = """
     {% endif %}
     
     <div class="footer">
-        ITINERÁRIO<br>
-        Desenvolvedor - Luanda, Angola<br>
+        HENERÁRIO<br>
+        Desenvolvedor - Lunda-Sul, Angola<br>
         WhatsApp: +244 973574928
     </div>
 </body>
